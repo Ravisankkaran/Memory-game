@@ -8,10 +8,12 @@
       <h3 class="text-center">Current Moves: {{ moves }}</h3>
       <!-- display avilable moves -->
       <h3 class="text-center">Avilablemoves: {{ avilablemoves }}</h3>
+
       <b-container>
         <b-row class="justify-content-center" >
           <b-col v-for="(card, index) in cardscopy" :key="index" cols="3" class="mb-3">
             <!-- card container -->
+             
             <div class="flashcard" @click="toggleCard(card)">
                 <!-- adding flip animations -->
               <transition name="flip">
@@ -28,14 +30,20 @@
     </b-container>
       <!-- Modal -->
       <b-modal v-model="showModal" title="Congratulations!" @ok="resetGame">
-        You won the game!
+       <CelebrationPage/>
       </b-modal>
     </div>
   </template>
   
   <script>
+  import CelebrationPage from '@/components/CelebrationPage.vue';
+
   export default {
+    
     name: 'MainPage',
+    components: {
+        CelebrationPage,
+  },
     data() {
       return {
         cards: [
@@ -62,7 +70,7 @@
         //make duplicate copies of original array
         this.cardscopy = [  ...this.cards,  ...this.cards.map(card => ({...card, }))];
         // Shuffle the cards when the component is created
-        this.shuffleCards(); 
+        // this.shuffleCards(); 
     },
     methods: {
         //card toggle function

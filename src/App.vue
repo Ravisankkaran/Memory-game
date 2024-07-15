@@ -2,6 +2,7 @@
 <template>
   <div id="app">
       <MemoryGame />
+     
   </div>
 </template>
 
@@ -14,6 +15,7 @@ export default {
   name: 'App',
   components: {
     MemoryGame,
+    
   },
 };
 
