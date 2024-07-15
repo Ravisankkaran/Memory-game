@@ -46,32 +46,23 @@
           { id: '5', front: require('@/assets/Images/front.jpeg'), back: require('@/assets/Images/chilli.jpg'), flipped: false, matched: false },
           { id: '6', front: require('@/assets/Images/front.jpeg'), back: require('@/assets/Images/carrot.jpg'), flipped: false, matched: false },
         
-        //   { id: '7', front: require('@/assets/Images/front.jpeg'), back: require('@/assets/Images/asparagus.jpg'), flipped: false, matched: false },
-        //   { id: '8', front: require('@/assets/Images/front.jpeg'), back: require('@/assets/Images/avacado.jpg'), flipped: false, matched: false },
-        //   { id: '9', front: require('@/assets/Images/front.jpeg'), back: require('@/assets/Images/beets.jpg'), flipped: false, matched: false },
-        //   { id: '10', front: require('@/assets/Images/front.jpeg'), back: require('@/assets/Images/broccoli.jpg'), flipped: false, matched: false },
-        //   { id: '11', front: require('@/assets/Images/front.jpeg'), back: require('@/assets/Images/chilli.jpg'), flipped: false, matched: false },
-        //   { id: '12', front: require('@/assets/Images/front.jpeg'), back: require('@/assets/Images/carrot.jpg'), flipped: false, matched: false },
           
         ],
-        cardscopy:[],
-        firstCard: null,
-        secondCard: null,
-        point: 0,
-        moves: 0,
-        totalmoves: 15,
-        avilablemoves: 15,
+        cardscopy:[],// initialize array 
+        firstCard: null, // assigning firstcard as 'null' in initial stage
+        secondCard: null, // assigning secondcard as 'null' in initial stage
+        point: 0,// assigning point as '0' in initial stage
+        moves: 0,// assigning moves as '0' in initial stage
+        totalmoves: 15,// assigning totalmoves as '15' in initial stage
+        avilablemoves: 15, // assigning avilable moves as '15' in initial stage
         showModal: false, 
       };
     },
     created() {
-        
+        //make duplicate copies of original array
         this.cardscopy = [  ...this.cards,  ...this.cards.map(card => ({...card, }))];
-
-
-
-  // Shuffle the cards when the component is created
-  this.shuffleCards(); 
+        // Shuffle the cards when the component is created
+        this.shuffleCards(); 
     },
     methods: {
         //card toggle function
@@ -88,18 +79,17 @@
         // If it's the first card, store it
         if (!this.firstCard) {
           this.firstCard = card;
-          this.moves += 1;
-          this.avilablemoves=this.totalmoves-this.moves;
-          if(this.avilablemoves===0){
+          
+          if(this.avilablemoves===0){//check for avilable moves and throw alert 
             alert("all moves are over")
             this.resetGame()
           }
         } else {
+           // If it's the second card, store it
           this.secondCard = card;
-        //   if (this.firstCard.id === this.secondCard.id) {
-        //     this.resetSelection();
-            
-        //   }
+          this.moves += 1; // increment moves
+          this.avilablemoves=this.totalmoves-this.moves; // update avilable moves
+
           // Check for a match
           if (this.firstCard.back === this.secondCard.back) {
             this.firstCard.matched = true;
