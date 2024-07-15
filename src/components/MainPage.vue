@@ -1,36 +1,42 @@
 <template>
     <div id="card-game">
-        <!-- title -->
+      <!-- title -->
       <h1 class="text-center p-5">Memory Game</h1>
       <!-- score points -->
       <h3 class="text-center">Score: {{ point }}</h3>
       <!-- display moves -->
       <h3 class="text-center">Current Moves: {{ moves }}</h3>
-      <!-- display avilable moves -->
-      <h3 class="text-center">Avilablemoves: {{ avilablemoves }}</h3>
-
+      <!-- display available moves -->
+      <h3 class="text-center">Available Moves: {{ avilableMoves }}</h3>
+  
       <b-container>
-        <b-row class="justify-content-center" >
-          <b-col v-for="(card, index) in cardscopy" :key="index" cols="3" class="mb-3">
+        <b-row class="justify-content-center">
+          <b-col
+            v-for="(card, index) in cardsCopy"
+            :key="index"
+            cols="12"
+            sm="6"
+          md="3"
+            class="mb-3 d-flex justify-content-center"
+          >
             <!-- card container -->
-             
             <div class="flashcard" @click="toggleCard(card)">
-                <!-- adding flip animations -->
+              <!-- adding flip animations -->
               <transition name="flip">
                 <img
                   :src="card.flipped ? card.back : card.front"
                   :alt="card.flipped ? 'Back' : 'Front'"
-                  class="card img-fluid"
+                  class="card shadow-animate img-fluid"
                   :class="{ matched: card.matched }"
                 />
               </transition>
             </div>
           </b-col>
         </b-row>
-    </b-container>
+      </b-container>
       <!-- Modal -->
-      <b-modal v-model="showModal" title="Congratulations!" @ok="resetGame">
-       <CelebrationPage/>
+      <b-modal v-model="showModal" title="Congratulations!" @ok="resetGame" hide-header-close ok-only>
+        <CelebrationPage />
       </b-modal>
     </div>
   </template>
@@ -47,35 +53,37 @@
     data() {
       return {
         cards: [
-          { id: '1', front: require('@/assets/Images/front.jpeg'), back: require('@/assets/Images/asparagus.jpg'), flipped: false, matched: false },
-          { id: '2', front: require('@/assets/Images/front.jpeg'), back: require('@/assets/Images/avacado.jpg'), flipped: false, matched: false },
-          { id: '3', front: require('@/assets/Images/front.jpeg'), back: require('@/assets/Images/beets.jpg'), flipped: false, matched: false },
-          { id: '4', front: require('@/assets/Images/front.jpeg'), back: require('@/assets/Images/broccoli.jpg'), flipped: false, matched: false },
-          { id: '5', front: require('@/assets/Images/front.jpeg'), back: require('@/assets/Images/chilli.jpg'), flipped: false, matched: false },
-          { id: '6', front: require('@/assets/Images/front.jpeg'), back: require('@/assets/Images/carrot.jpg'), flipped: false, matched: false },
+          { id: '1', front: require('@/assets/Images/front.jpeg'), back: require('@/assets/Images/back-1.jpeg'), flipped: false, matched: false },
+          { id: '2', front: require('@/assets/Images/front.jpeg'), back: require('@/assets/Images/back-2.jpeg'), flipped: false, matched: false },
+          { id: '3', front: require('@/assets/Images/front.jpeg'), back: require('@/assets/Images/back-3.jpeg'), flipped: false, matched: false },
+          { id: '4', front: require('@/assets/Images/front.jpeg'), back: require('@/assets/Images/back-4.jpeg'), flipped: false, matched: false },
+          { id: '5', front: require('@/assets/Images/front.jpeg'), back: require('@/assets/Images/back-5.jpeg'), flipped: false, matched: false },
+          { id: '6', front: require('@/assets/Images/front.jpeg'), back: require('@/assets/Images/back-6.jpeg'), flipped: false, matched: false },
         
           
         ],
-        cardscopy:[],// initialize array 
+        cardsCopy:[],// initialize array 
         firstCard: null, // assigning firstcard as 'null' in initial stage
         secondCard: null, // assigning secondcard as 'null' in initial stage
         point: 0,// assigning point as '0' in initial stage
         moves: 0,// assigning moves as '0' in initial stage
-        totalmoves: 15,// assigning totalmoves as '15' in initial stage
-        avilablemoves: 15, // assigning avilable moves as '15' in initial stage
+        totalMoves: 15,// assigning totalmoves as '15' in initial stage
+        avilableMoves: 15, // assigning avilable moves as '15' in initial stage
         showModal: false, 
       };
     },
     created() {
         //make duplicate copies of original array
-        this.cardscopy = [  ...this.cards,  ...this.cards.map(card => ({...card, }))];
+        this.cardsCopy = [  ...this.cards,  ...this.cards.map(card => ({...card, }))];
         // Shuffle the cards when the component is created
-        // this.shuffleCards(); 
+        this.shuffleCards(); 
     },
+
+
     methods: {
         //card toggle function
       toggleCard(card) {
-
+        if(this.avilableMoves===0) return;
         // If two cards are already flipped, do nothing
         if (this.firstCard && this.secondCard) return;
 
@@ -87,22 +95,28 @@
         // If it's the first card, store it
         if (!this.firstCard) {
           this.firstCard = card;
-          
-          if(this.avilablemoves===0){//check for avilable moves and throw alert 
-            alert("all moves are over")
-            this.resetGame()
-          }
+         
         } else {
            // If it's the second card, store it
           this.secondCard = card;
-          this.moves += 1; // increment moves
-          this.avilablemoves=this.totalmoves-this.moves; // update avilable moves
+           // update avilable moves
+           this.moves += 1; // increment moves
+
+            this.avilableMoves=this.totalMoves-this.moves;
+            if(this.avilableMoves == 0){
+                setTimeout(() => {
+                    alert("all moves are over")
+                    this.resetGame()
+                }, 2000)
+                        
+            }
 
           // Check for a match
           if (this.firstCard.back === this.secondCard.back) {
             this.firstCard.matched = true;
             this.secondCard.matched = true;
             this.point += 1;  // Increment the point
+         
             this.resetSelection();
   
             // Show modal if point reaches 8
@@ -121,7 +135,7 @@
       },
       // Simple shuffle method using sort and Math.random
       shuffleCards() {
-        this.cardscopy.sort(() => Math.random() - 0.5);
+        this.cardsCopy.sort(() => Math.random() - 0.5);
       },
       //rest card selection
       resetSelection() {
@@ -131,14 +145,14 @@
       // Reset game logic, shuffle cards and reset points
       resetGame() {
         this.shuffleCards();
-        this.cardscopy.forEach(card => {
+        this.cardsCopy.forEach(card => {
           card.flipped = false;
           card.matched = false;
         });
         this.point = 0;
         this.showModal = false;
         this.moves=0;
-        this.avilablemoves=15;
+        this.avilableMoves=15;
       },
     },
   };
