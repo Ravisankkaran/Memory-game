@@ -1,15 +1,27 @@
-<template>
+<template>          
     <div id="card-game">
-      <!-- title -->
-      <h1 class="text-center p-5">Memory Game</h1>
-      <!-- score points -->
-      <h3 class="text-center">Score: {{ point }}</h3>
-      <!-- display moves -->
-      <h3 class="text-center">Current Moves: {{ moves }}</h3>
-      <!-- display available moves -->
-      <h3 class="text-center">Available Moves: {{ avilableMoves }}</h3>
-  
-      <b-container>
+    <!-- heading container -->
+    <div class="heading-container">
+        <h1 class="text-center ">Memory Game</h1>
+        <div  class="moves-container">
+            <div>
+        
+            <h3 class="ml-5">Current Moves: {{ moves }}</h3>
+        <!-- display available moves -->
+            <h3 class="ml-5">Available Moves: {{ avilableMoves }}</h3>
+        </div>
+        <div class="score-container"> 
+            <h3 class="">Score</h3>
+            <h3 class=""> {{ point }}</h3>
+
+        </div>
+        </div>
+    </div>
+    <!-- BG-IMG -->
+    <div class="image-url">
+        
+    </div>
+    <b-container>  
         <b-row class="justify-content-center">
           <b-col
             v-for="(card, index) in cardsCopy"
@@ -20,25 +32,36 @@
             class="mb-3 d-flex justify-content-center"
           >
             <!-- card container -->
-            <div class="flashcard" @click="toggleCard(card)">
-              <!-- adding flip animations -->
-              <transition name="flip">
-                <img
-                  :src="card.flipped ? card.back : card.front"
-                  :alt="card.flipped ? 'Back' : 'Front'"
-                  class="card shadow-animate img-fluid"
-                  :class="{ matched: card.matched }"
-                />
-              </transition>
-            </div>
+            
+            <div class="flip-card" @click="toggleCard(card)">
+    <div class="flip-card-inner" :class="{ flipped: card.flipped }">
+      <div class="flip-card-front">
+        <img
+          :src="card.front"
+          :alt="'Front of ' + card.name"
+          class="card shadow-animate img-fluid"
+        />
+      </div>
+      <div class="flip-card-back">
+        <img
+          :src="card.back"
+          :alt="'Back of ' + card.name"
+          class="card shadow-animate img-fluid"
+           :class="{ matched: card.matched }"
+        />
+      </div>
+    </div>
+  </div>
+
           </b-col>
         </b-row>
-      </b-container>
+    </b-container>
       <!-- Modal -->
-      <b-modal v-model="showModal" title="Congratulations!" @ok="resetGame" hide-header-close ok-only>
+    <b-modal v-model="showModal" title="Congratulations!" @ok="resetGame" hide-header-close ok-only>
         <CelebrationPage />
-      </b-modal>
+    </b-modal>
     </div>
+
   </template>
   
   <script>
@@ -53,12 +76,12 @@
     data() {
       return {
         cards: [
-          { id: '1', front: require('@/assets/Images/front.jpeg'), back: require('@/assets/Images/back-1.jpeg'), flipped: false, matched: false },
-          { id: '2', front: require('@/assets/Images/front.jpeg'), back: require('@/assets/Images/back-2.jpeg'), flipped: false, matched: false },
-          { id: '3', front: require('@/assets/Images/front.jpeg'), back: require('@/assets/Images/back-3.jpeg'), flipped: false, matched: false },
-          { id: '4', front: require('@/assets/Images/front.jpeg'), back: require('@/assets/Images/back-4.jpeg'), flipped: false, matched: false },
-          { id: '5', front: require('@/assets/Images/front.jpeg'), back: require('@/assets/Images/back-5.jpeg'), flipped: false, matched: false },
-          { id: '6', front: require('@/assets/Images/front.jpeg'), back: require('@/assets/Images/back-6.jpeg'), flipped: false, matched: false },
+          { id: '1', front: require('@/assets/Images/front.jpeg'), back: require('@/assets/Images/cat.jpeg'), flipped: false, matched: false },
+          { id: '2', front: require('@/assets/Images/front.jpeg'), back: require('@/assets/Images/elephant.jpeg'), flipped: false, matched: false },
+          { id: '3', front: require('@/assets/Images/front.jpeg'), back: require('@/assets/Images/lion.jpeg'), flipped: false, matched: false },
+          { id: '4', front: require('@/assets/Images/front.jpeg'), back: require('@/assets/Images/panda.jpeg'), flipped: false, matched: false },
+          { id: '5', front: require('@/assets/Images/front.jpeg'), back: require('@/assets/Images/dog.jpeg'), flipped: false, matched: false },
+          { id: '6', front: require('@/assets/Images/front.jpeg'), back: require('@/assets/Images/cock.jpeg'), flipped: false, matched: false },
         
           
         ],
@@ -157,5 +180,4 @@
     },
   };
   </script>
-  
- 
+
